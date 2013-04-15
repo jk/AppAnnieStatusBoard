@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>de.rheinfabrik.appanniesalesboard</string>
+    <string>de.rheinfabrik.appanniestatusboard</string>
     <key>ProgramArguments</key>
     <array>
         <string>/bin/sh</string>
