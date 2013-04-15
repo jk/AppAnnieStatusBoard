@@ -2,6 +2,10 @@ require 'httparty'
 require 'json'
 require 'date'
 
+#####################################################################
+# Configuration Start
+#####################################################################
+
 # For more information about the parameters, see https://appannie.zendesk.com/entries/23215097-2-App-Sales
 username = "" # App Annie username
 password = "" # App Annie password
@@ -14,6 +18,9 @@ days_to_show = 30
 
 outputFile = "/Users/tim/Dropbox/Status\ Board/salesboard.json"
 
+#####################################################################
+# Configuration End
+#####################################################################
 
 options = { :basic_auth => { :username => username , :password => password } }
 end_date = Date.today
