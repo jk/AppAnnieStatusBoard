@@ -9,7 +9,7 @@ account_id = "" # App Annie account connection id. You can get all account conne
 app_id = "" # Apple App ID, can be found in iTunes Connect
 graph_title = ""
 graph_type = "line"
-hide_totals = true
+hide_totals = false
 days_to_show = 30
 
 outputFile = "/Users/tim/Dropbox/Status\ Board/salesboard.json"
