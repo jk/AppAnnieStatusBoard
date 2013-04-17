@@ -11,10 +11,6 @@ This is a script that generates a sales graph for Panic's Status Board using the
 5. Open Termimal and run `launchctl load ~/Library/LaunchAgents/de.rheinfabrik.appanniestatusboard.plist`. This should generate the first version of your json file.
 6. Go to Dropbox and get a shareable link for the JSON file that is output and add it to Status Board on your iPad.
 
-### Limitations
-
-Currently the graph can only be generated for one app.
-
 ### Support
 
 Run into an issue? Throw an issue up on GitHub. Better yet, throw up a pull request with a fix.
