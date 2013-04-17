@@ -10,11 +10,14 @@ require 'date'
 username = "" # App Annie username
 password = "" # App Annie password
 account_id = "" # App Annie account connection id. You can get all account connection info by calling /v1/accounts
-app_id = "" # Apple App ID, can be found in iTunes Connect
 graph_title = ""
 graph_type = "line"
 hide_totals = false
 days_to_show = 30
+products = [
+    { :title => "Product 1", :app_id => 000000000, :color => "green" },
+    { :title => "Product 2", :app_id => 000000000, :color => "blue" }
+]
 
 outputFile = "/Users/tim/Dropbox/Status\ Board/salesboard.json"
 
@@ -25,7 +28,6 @@ outputFile = "/Users/tim/Dropbox/Status\ Board/salesboard.json"
 options = { :basic_auth => { :username => username , :password => password } }
 end_date = Date.today
 start_date = (end_date - days_to_show)
-response = HTTParty.get("https://api.appannie.com/v1/accounts/#{account_id}/apps/#{app_id}/sales?break_down=date&start_date=#{start_date.to_s}&end_date=#{end_date.to_s}", options)
 
 months = { 
     "1" => "Jan",
@@ -42,18 +44,34 @@ months = {
     "12" => "Dec"
 }
 
-data_points = []
-sales = response.parsed_response["sales_list"]
-sales.reverse!
-sales.each do |datapoint|
+data_sequences = []
+min_total = 0
+max_total = 0
 
-  date = Date.parse(datapoint["date"])
-  date_string = "#{months["#{date.month}"]} #{date.day}"
+products.each do |p|
+  sales_data = []
+  response = HTTParty.get("https://api.appannie.com/v1/accounts/#{account_id}/apps/#{p[:app_id]}/sales?break_down=date&start_date=#{start_date.to_s}&end_date=#{end_date.to_s}", options)
 
-  data_points << {
-    :title => date_string,
-    :value => datapoint["revenue"]["app"]["downloads"]
-  }
+  sales = response.parsed_response["sales_list"]
+  sales.reverse!
+
+  sales.each do |datapoint|
+    date = Date.parse(datapoint["date"])
+    date_string = "#{months["#{date.month}"]} #{date.day}"
+
+    value = datapoint["revenue"]["app"]["downloads"]
+
+    min_total = value.to_i if value.to_i < min_total || min_total == 0
+    max_total = value.to_i if value.to_i > max_total
+
+    sales_data << {
+      :title => date_string,
+      :value => value
+    }
+  end
+
+  # Add the product to the data sequences.
+  data_sequences << { :title => p[:title], :color => p[:color], :datapoints => sales_data }
 end
 
 sales_graph = {
@@ -63,16 +81,12 @@ sales_graph = {
     :yAxis => {
       :hide => hide_totals,
       :units => {
-        :prefix => "$"
+        :prefix => "$",
+        :min_total => min_total,
+        :max_total => max_total
       }
     },
-    :datasequences => [
-      {
-        :title => "Sales",
-        :color => "green",
-        :datapoints => data_points
-      }
-    ]
+    :datasequences => data_sequences
   }
 }
 
