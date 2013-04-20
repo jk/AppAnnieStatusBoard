@@ -80,10 +80,10 @@ sales_graph = {
     :type => graph_type,
     :yAxis => {
       :hide => hide_totals,
+      :minValue => min_total,
+      :maxValue => max_total,
       :units => {
         :prefix => "$",
-        :min_total => min_total,
-        :max_total => max_total
       }
     },
     :datasequences => data_sequences
