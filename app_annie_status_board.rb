@@ -14,6 +14,7 @@ graph_title = ""
 graph_type = "line"
 hide_totals = false
 days_to_show = 30
+date_format = "%b %-d" # Date format for x-axis. Default format is "Apr 20"
 products = [
     { :title => "Product 1", :app_id => 000000000, :color => "green" },
     { :title => "Product 2", :app_id => 000000000, :color => "blue" }
@@ -29,21 +30,6 @@ options = { :basic_auth => { :username => username , :password => password } }
 end_date = Date.today
 start_date = (end_date - days_to_show)
 
-months = { 
-    "1" => "Jan",
-    "2" => "Feb",
-    "3" => "Mar",
-    "4" => "Apr",
-    "5" => "May",
-    "6" => "Jun",
-    "7" => "Jul",
-    "8" => "Aug",
-    "9" => "Sep",
-    "10" => "Oct",
-    "11" => "Nov",
-    "12" => "Dec"
-}
-
 data_sequences = []
 min_total = 0
 max_total = 0
@@ -57,7 +43,7 @@ products.each do |p|
 
   sales.each do |datapoint|
     date = Date.parse(datapoint["date"])
-    date_string = "#{months["#{date.month}"]} #{date.day}"
+    date_string = date.strftime(date_format)
 
     value = datapoint["revenue"]["app"]["downloads"]
 
